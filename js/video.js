@@ -8,12 +8,6 @@ const getTime = (seconds) => {
   const minutes = Math.floor(seconds / 60); // Calculate minutes
   seconds %= 60; // Remaining seconds are the leftover seconds
 
-  //   return {
-  //     days: days,
-  //     hours: hours,
-  //     minutes: minutes,
-  //     seconds: seconds,
-  //   };
   return `${days < 1 ? "" : days + "d"} ${hours}h ${minutes} ago`;
 };
 
@@ -34,28 +28,36 @@ const loadVideos = () => {
     .catch((err) => console.log(err));
 };
 
-const demo = {
-  category_id: "1001",
-  video_id: "aaah",
-  thumbnail: "https://i.ibb.co/hY496Db/coloer-of-the-wind.jpg",
-  title: "Colors of the Wind",
-  authors: [
-    {
-      profile_picture: "https://i.ibb.co/6r4cx4P/ethen-clack.png",
-      profile_name: "Ethan Clark",
-      verified: true,
-    },
-  ],
-  others: {
-    views: "233K",
-    posted_date: "16090",
-  },
-  description:
-    "Ethan Clark's 'Colors of the Wind' is a vibrant musical exploration that captivates listeners with its rich, expressive melodies and uplifting rhythm. With 233K views, this song is a celebration of nature's beauty and human connection, offering a soothing and enriching experience for fans of heartfelt, nature-inspired music.",
+const categoryData = (id) => {
+  fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
+    .then((res) => res.json())
+    .then((data) => displayVideos(data.category))
+    .catch((err) => console.log(err));
 };
+
+// const demo = {
+//   category_id: "1001",
+//   video_id: "aaah",
+//   thumbnail: "https://i.ibb.co/hY496Db/coloer-of-the-wind.jpg",
+//   title: "Colors of the Wind",
+//   authors: [
+//     {
+//       profile_picture: "https://i.ibb.co/6r4cx4P/ethen-clack.png",
+//       profile_name: "Ethan Clark",
+//       verified: true,
+//     },
+//   ],
+//   others: {
+//     views: "233K",
+//     posted_date: "16090",
+//   },
+//   description:
+//     "Ethan Clark's 'Colors of the Wind' is a vibrant musical exploration that captivates listeners with its rich, expressive melodies and uplifting rhythm. With 233K views, this song is a celebration of nature's beauty and human connection, offering a soothing and enriching experience for fans of heartfelt, nature-inspired music.",
+// };
 
 const displayVideos = (movies) => {
   const videosContainer = document.getElementById("videos");
+  videosContainer.innerHTML = "";
 
   movies.forEach((movie) => {
     const card = document.createElement("div");
@@ -111,10 +113,10 @@ const displayCategories = (categories) => {
   categories.forEach((element) => {
     const btnElement = document.createElement("button");
     btnElement.classList = "btn";
+    btnElement.onclick = () => categoryData(element.category_id);
     btnElement.innerText = element.category;
     categoriesContainer.append(btnElement);
   });
-  //   console.log(data);
 };
 
 loadCategories();
