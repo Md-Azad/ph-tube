@@ -1,3 +1,22 @@
+const getTime = (seconds) => {
+  const days = Math.floor(seconds / (24 * 3600)); // Calculate days
+  seconds %= 24 * 3600; // Remaining seconds after calculating days
+
+  const hours = Math.floor(seconds / 3600); // Calculate hours
+  seconds %= 3600; // Remaining seconds after calculating hours
+
+  const minutes = Math.floor(seconds / 60); // Calculate minutes
+  seconds %= 60; // Remaining seconds are the leftover seconds
+
+  //   return {
+  //     days: days,
+  //     hours: hours,
+  //     minutes: minutes,
+  //     seconds: seconds,
+  //   };
+  return `${days < 1 ? "" : days + "d"} ${hours}h ${minutes} ago`;
+};
+
 // fetch, load, and show categories on html
 
 // create loadCategories funciton
@@ -39,7 +58,6 @@ const displayVideos = (movies) => {
   const videosContainer = document.getElementById("videos");
 
   movies.forEach((movie) => {
-    console.log(movie.thumbnail);
     const card = document.createElement("div");
     card.classList = "card card-compact";
     card.innerHTML = `
@@ -47,9 +65,15 @@ const displayVideos = (movies) => {
             <img class="w-full h-full object-cover"
             src=${movie?.thumbnail};
             alt="Shoes" />
-            <span class="absolute bg-black text-white bottom-2 right-2">${
-              movie.others.posted_date
-            } </span>
+
+            ${
+              movie.others.posted_date?.length === 0
+                ? ""
+                : `<span class="absolute bg-black text-white bottom-2 right-2">
+                  ${getTime(movie.others.posted_date)}
+                </span>`
+            }
+            
         </figure>
         <div class="px-0 py-4 flex items-center gap-2">
             <div>
